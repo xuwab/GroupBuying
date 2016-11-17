@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyPointView">
+        <attr name="MyPointView_Num" format="integer"/>
+        <attr name="MyPointView_foreColor" format="reference"/>
+    </declare-styleable>
+</resources>

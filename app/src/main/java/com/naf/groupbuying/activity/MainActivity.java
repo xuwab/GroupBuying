@@ -11,13 +11,14 @@ import android.widget.Toast;
 
 import com.naf.groupbuying.R;
 import com.naf.groupbuying.fragment.MainFragment;
+import com.naf.groupbuying.test.ToolbarActivity;
 
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ToolbarActivity {
 
     @BindView(R.id.tabHost2)
     FragmentTabHost mTabHost;
