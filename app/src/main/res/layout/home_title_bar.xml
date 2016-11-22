@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/home_title_bar_style"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/location_lay"
+        android:layout_width="74.0dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:background="@drawable/imageview_btn_selector"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left|center"
+            android:maxLines="2"
+            android:text="广州"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="3.0dp"
+            android:src="@mipmap/tool_icon_aroow_up_s"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_right_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/scan_img"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/imageview_btn_selector"
+            android:paddingLeft="10.0dp"
+            android:paddingRight="10.0dp"
+            android:src="@mipmap/tool_icon_scan_nor"
+            android:visibility="visible"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_msg_num"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/imageview_btn_selector"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/msg_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/tool_icon_message_nor"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/news_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-7.0dp"
+                android:layout_marginTop="8.0dp"
+                android:layout_toRightOf="@id/msg_iv"
+                android:background="@mipmap/tool_icon_message_num"
+                android:gravity="center"
+                android:text="20"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="10.0sp"
+                android:visibility="invisible"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/inputLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/ll_right_layout"
+        android:layout_toRightOf="@id/location_lay"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="5.0dp"
+        android:paddingTop="5.0dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10.0dp"
+            android:layout_marginRight="10.0dp"
+            android:src="@mipmap/tool_home_search"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/search_edittext_hint"
+            android:textSize="12.0sp"/>
+    </LinearLayout>
+</RelativeLayout>

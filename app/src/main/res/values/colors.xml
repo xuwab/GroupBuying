@@ -3,9 +3,25 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="transparent">#00000000</color>
     <color name="white">#FFffff</color>
     <color name="login_unable_bg_green">#ff90e4da</color>
     <color name="login_unable_bg">#ffcdced0</color>
     <color name="tab_normal">#c5c9d0</color>
     <color name="tab_selected">#fb773b</color>
+
+
+
+    <!--首页-->
+    <color name="home_title_bar_color">#009688</color>
+    <color name="image_view_btn_pressed_bgColor">#30000000</color>
+    <color name="bg_common_gray">#ffe2e2e2</color>
+    <color name="input_normal">#c5c9d0</color>
+
+        <!-- GoodsListItem 首页最下面的listView -->
+        <color name="title_color">#009688</color>
+        <color name="value_color">#ffa2a2a2</color>
+        <color name="app_white">#fff1f1f2</color>
+        <!--导航标点-->
+        <color name="app_green">#009688</color>
 </resources>

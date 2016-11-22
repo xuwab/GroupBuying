@@ -28,4 +28,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    //fresco
+    compile 'com.facebook.fresco:fresco:0.12.0'
+
+    //网络
+    compile 'com.yolanda.nohttp:nohttp:1.0.4'
+
+    //解析
+    compile 'com.google.code.gson:gson:2.2.4'
 }

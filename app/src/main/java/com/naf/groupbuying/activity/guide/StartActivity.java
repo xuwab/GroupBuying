@@ -1,4 +1,4 @@
-package com.naf.groupbuying.activity;
+package com.naf.groupbuying.activity.guide;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.activity.MainActivity;
 
 /**
  * Created by naf on 2016/11/10.

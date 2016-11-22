@@ -1,4 +1,4 @@
-package com.naf.groupbuying.activity;
+package com.naf.groupbuying.activity.guide;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.activity.MainActivity;
 
 import java.util.ArrayList;
 

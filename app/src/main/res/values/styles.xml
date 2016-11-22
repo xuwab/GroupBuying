@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- 自定义ViewPagerIndicator  -->
+    <declare-styleable name="ViewPagerIndicator">
+        <attr name="numbers" format="integer"/>
+        <attr name="foreColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="gapWidth" format="float"/>
+    </declare-styleable>
+
+
+    <!-- 首页 Toolbar的style-->
+    <style name="home_title_bar_style">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/home_title_bar_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50.0dp</item>
+    </style>
 </resources>
