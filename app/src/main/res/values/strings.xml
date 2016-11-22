@@ -3,4 +3,7 @@
 
     <!-- 首页 -->
     <string name="search_edittext_hint">请输入商品名、品类或商圈...</string>
+
+    <!--周边-->
+    <string name="action_map">action_edit</string>
 </resources>

@@ -15,14 +15,13 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
-import com.naf.groupbuying.adapter.LvCommonAdapter;
 import com.naf.groupbuying.adapter.main.FavouriteAdapter;
 import com.naf.groupbuying.adapter.main.GuideGridAdapter;
 import com.naf.groupbuying.adapter.MyPagerAdapter;
 import com.naf.groupbuying.bean.ContantsPool;
 import com.naf.groupbuying.entity.GoodsInfo;
 import com.naf.groupbuying.entity.HomeIconInfo;
-import com.naf.groupbuying.listner.MyPagerListner;
+import com.naf.groupbuying.listner.main.MyPagerListner;
 import com.naf.groupbuying.nohttp.CallServer;
 import com.naf.groupbuying.nohttp.HttpListner;
 import com.naf.groupbuying.widget.ViewPagerIndicator;

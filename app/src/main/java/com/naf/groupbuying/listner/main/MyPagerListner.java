@@ -1,4 +1,4 @@
-package com.naf.groupbuying.listner;
+package com.naf.groupbuying.listner.main;
 
 import android.support.v4.view.ViewPager;
 

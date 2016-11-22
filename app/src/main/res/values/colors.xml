@@ -24,4 +24,9 @@
         <color name="app_white">#fff1f1f2</color>
         <!--导航标点-->
         <color name="app_green">#009688</color>
+
+
+    <!--周边-->
+        <!--toolbar-->
+        <color name="around_toolbar_green">#009688</color>
 </resources>
