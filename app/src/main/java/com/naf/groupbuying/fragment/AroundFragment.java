@@ -76,6 +76,7 @@ public class AroundFragment extends Fragment {
         //toolbar设置菜单按钮
         mToolbar.inflateMenu(R.menu.around_title_menu);
         mToolbar.setOnMenuItemClickListener(new ToolMenuClickListener(getActivity()));
+        mToolbar.setOnMenuItemClickListener(new ToolMenuClickListener(getActivity()));
         initData();
         initView();
         return mView;
