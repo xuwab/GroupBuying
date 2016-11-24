@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.naf.groupbuying.R;
-import com.naf.groupbuying.activity.guide.StartActivity;
 import com.naf.groupbuying.activity.map.LocationActivity;
-import com.naf.groupbuying.fragment.AroundFragment;
 
 /**
  * Created by Administrator on 2016/11/22.
