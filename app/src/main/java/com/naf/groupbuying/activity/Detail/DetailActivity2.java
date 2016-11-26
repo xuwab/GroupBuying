@@ -1,9 +1,9 @@
 package com.naf.groupbuying.activity.Detail;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
@@ -17,14 +17,20 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.adapter.MyPagerAdapter;
 import com.naf.groupbuying.bean.ContantsPool;
 import com.naf.groupbuying.entity.DetailInfo;
+import com.naf.groupbuying.listner.main.MyPagerListner;
 import com.naf.groupbuying.nohttp.CallServer;
 import com.naf.groupbuying.nohttp.HttpListner;
+import com.naf.groupbuying.widget.ViewPagerIndicator;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
 import com.yolanda.nohttp.rest.Request;
 import com.yolanda.nohttp.rest.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +40,8 @@ import butterknife.OnClick;
  * Created by naf on 2016/11/26.
  */
 
-public class DetailActivity2 extends AppCompatActivity implements HttpListner<String>{
+public class DetailActivity2 extends AppCompatActivity implements HttpListner<String> {
     private static final int REQUEST_DETAIL = 1;
-    @BindView(R.id.iv_detail)
-    SimpleDraweeView ivDetail;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_decs)
@@ -76,20 +80,24 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
     Button btnBuy;
     @BindView(R.id.layout_buy)
     RelativeLayout layoutBuy;
+    @BindView(R.id.vp_detail)
+    ViewPager vpDetail;
+    @BindView(R.id.detail_vp_indicator)
+    ViewPagerIndicator detailVpIndicator;
 
     private DetailInfo mDetailInfo;
-
+    private List<View> vpList=new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        Intent intent=getIntent();
-        String goodId=intent.getStringExtra("good_id");
+        Intent intent = getIntent();
+        String goodId = intent.getStringExtra("good_id");
 
-        Request<String> request= NoHttp.createStringRequest(ContantsPool.baseUrl+goodId+".txt", RequestMethod.GET);
-        CallServer.getInstance().add(DetailActivity2.this,REQUEST_DETAIL,request,this,true,true);
+        Request<String> request = NoHttp.createStringRequest(ContantsPool.baseUrl + goodId + ".txt", RequestMethod.GET);
+        CallServer.getInstance().add(DetailActivity2.this, REQUEST_DETAIL, request, this, true, true);
 
     }
 
@@ -109,9 +117,9 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
 
     @Override
     public void onSucceed(int what, Response<String> response) {
-        switch (what){
+        switch (what) {
             case REQUEST_DETAIL:
-                Gson gson=new Gson();
+                Gson gson = new Gson();
                 mDetailInfo = gson.fromJson(response.get(), DetailInfo.class);
                 //本单详情的网页信息
                 String details = mDetailInfo.getResult().getDetails();
@@ -127,8 +135,19 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
                 //已售
                 tvBought.setText(mDetailInfo.getResult().getValue());
                 //详情界面的图片
-                Uri uri = Uri.parse(mDetailInfo.getResult().getImages().get(0).getImage());
-                ivDetail.setImageURI(uri);
+//                Uri uri = Uri.parse(mDetailInfo.getResult().getImages().get(0).getImage());
+//                vpDetail.setImageURI(uri);
+                List<String> list=mDetailInfo.getResult().getDetail_imags();
+                for(int i=0;i<list.size();i++){
+                    View  view=getLayoutInflater().inflate(R.layout.detail_vp_item,null);
+                    SimpleDraweeView draweeView=(SimpleDraweeView)view.findViewById(R.id.sv_detail);
+                    draweeView.setImageURI(list.get(i));
+                    vpList.add(view);
+                }
+                vpDetail.setAdapter(new MyPagerAdapter(vpList));
+                detailVpIndicator.setNumbers(list.size());
+                vpDetail.setOnPageChangeListener(new MyPagerListner(detailVpIndicator));
+
                 break;
         }
 

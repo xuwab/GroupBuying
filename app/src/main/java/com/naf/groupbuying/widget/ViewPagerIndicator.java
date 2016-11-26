@@ -97,4 +97,9 @@ public class ViewPagerIndicator extends View {
         }
 
     }
+
+    public void setNumbers(int numbers){
+        this.mNumbers=numbers;
+        invalidate();
+    }
 }
