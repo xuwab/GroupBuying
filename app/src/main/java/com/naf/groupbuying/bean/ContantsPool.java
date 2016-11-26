@@ -13,5 +13,8 @@ public interface ContantsPool {
    /**猜你喜欢**/
    String spRecommendURL = baseUrl + "spRecommend.txt";
 
+   /**猜你喜欢**/
+   String spRecommendURL_NEW = baseUrl + "spRecommend_new.txt";
+
 
 }

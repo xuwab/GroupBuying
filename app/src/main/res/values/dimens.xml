@@ -13,4 +13,7 @@
         <!--搜索栏圆角-->
         <dimen name="round_btn_green_tk_corner">2.0dip</dimen>
 
+    <!--详情-->
+    <dimen name="section_text_size">18.0sp</dimen>
+    <dimen name="detail_textSize">17.0sp</dimen>
 </resources>

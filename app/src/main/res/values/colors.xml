@@ -4,12 +4,21 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
-    <color name="white">#FFffff</color>
     <color name="login_unable_bg_green">#ff90e4da</color>
     <color name="login_unable_bg">#ffcdced0</color>
     <color name="tab_normal">#c5c9d0</color>
     <color name="tab_selected">#fb773b</color>
 
+
+    <!--color-->
+    <color name="black">#ff646464</color>
+    <color name="white">#ffffffff</color>
+    <color name="red">#ffff00ff</color>
+    <color name="blue">#ff3366cc</color>
+    <color name="gray">#ff666666</color>
+    <color name="gray_2">#ffdcdcdc</color>
+    <color name="color_f6">#fff6f6f6</color>
+    <color name="green">#009688</color>
 
 
     <!--首页-->
@@ -29,4 +38,9 @@
     <!--周边-->
         <!--toolbar-->
         <color name="around_toolbar_green">#009688</color>
+
+
+    <!--详情-->
+    <color name="text_content_black">#ff3c3c3c</color>
+    <color name="money_symbol">#009688</color>
 </resources>

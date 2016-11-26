@@ -1,6 +1,7 @@
 package com.naf.groupbuying.fragment;
 
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.activity.Detail.DetailActivity2;
 import com.naf.groupbuying.adapter.main.FavouriteAdapter;
 import com.naf.groupbuying.adapter.main.GuideGridAdapter;
 import com.naf.groupbuying.adapter.MyPagerAdapter;
@@ -66,9 +68,22 @@ public class MainFragment extends Fragment implements ContantsPool,HttpListner<S
             ButterKnife.bind(this, view);
             initData();
             initView();
+            setListViewAction();
         }
 
         return view;
+    }
+
+    private void setListViewAction() {
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String goodId=mDatalists.get(position-1).getGoods_id();
+                Intent intent=new Intent(getActivity(), DetailActivity2.class);
+                intent.putExtra("good_id",goodId);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
@@ -122,7 +137,7 @@ public class MainFragment extends Fragment implements ContantsPool,HttpListner<S
             }
         }
 
-        Request<String> request= NoHttp.createStringRequest(spRecommendURL, RequestMethod.GET);
+        Request<String> request= NoHttp.createStringRequest(spRecommendURL_NEW, RequestMethod.GET);
         CallServer.getInstance().add(getActivity(),REQUEST_GOODSINFO,request,this,true,true);
 
     }
