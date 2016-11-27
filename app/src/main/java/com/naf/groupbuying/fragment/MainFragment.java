@@ -74,6 +74,8 @@ public class MainFragment extends Fragment implements ContantsPool,HttpListner<S
         return view;
     }
 
+
+
     private void setListViewAction() {
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

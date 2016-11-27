@@ -6,4 +6,12 @@
 
     <!--周边-->
     <string name="action_map">action_edit</string>
+
+    <!-- 登录界面 -->
+    <string name="login">登录</string>
+    <string name="register">快速注册</string>
+    <string name="uname_hint">用户名/邮箱/手机号</string>
+    <string name="pword_hint">密码</string>
+    <string name="check_code_hint">验证码</string>
+    <string name="union_login">使用合作网站账号登录</string>
 </resources>

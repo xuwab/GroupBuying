@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/layout_buy">
 
-        <ScrollView
+        <com.naf.groupbuying.custom.MyScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -75,6 +75,8 @@
                             android:id="@+id/tv_decs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="85dp"
+                            android:lines="2"
                             android:text="英俊潇洒,风流倜傥"
                             android:textSize="13dp"/>
 
@@ -254,7 +256,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-        </ScrollView>
+        </com.naf.groupbuying.custom.MyScrollView>
 
         <RelativeLayout
             android:id="@+id/layout_title"

@@ -48,6 +48,7 @@
 
         <activity android:name=".activity.map.LocationActivity"/>
         <activity android:name=".activity.Detail.DetailActivity2"/>
+        <activity android:name=".activity.login.LoginActivity"/>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
