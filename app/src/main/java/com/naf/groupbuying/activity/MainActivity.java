@@ -1,5 +1,6 @@
 package com.naf.groupbuying.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.naf.groupbuying.BmodTest.BmodTest;
+import com.naf.groupbuying.BmodTest.BmodTest;
 import com.naf.groupbuying.R;
 import com.naf.groupbuying.bean.ContantsPool;
 import com.naf.groupbuying.fragment.AroundFragment;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initFragmentTabHost();
+//        startActivity(new Intent(this, BmodTest.class));
     }
 
     private void initFragmentTabHost() {
