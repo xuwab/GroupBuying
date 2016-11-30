@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,12 +26,20 @@ import com.naf.groupbuying.listner.login.MyEditTextListener;
 import com.naf.groupbuying.nohttp.HttpListner;
 import com.yolanda.nohttp.rest.Response;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by naf on 2016/11/27.
@@ -77,6 +86,8 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     private String userName;
     private String password;
 
+    private boolean isLogin;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                 userName = s.toString();
                 isLoginEnable = TextUtils.isEmpty(userName) || TextUtils.isEmpty(password) ? false : true;
                 loginBtn.setEnabled(isLoginEnable);
-                ivDeleteUname.setVisibility(TextUtils.isEmpty(phone) ? View.GONE : View.VISIBLE);
+                ivDeleteUname.setVisibility(TextUtils.isEmpty(userName) ? View.GONE : View.VISIBLE);
             }
         });
         mPassword.addTextChangedListener(new MyEditTextListener() {
@@ -126,31 +137,61 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    mPassword.setSelection(mPassword.getText().toString().length());
                 } else {
                     mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    mPassword.setSelection(mPassword.getText().toString().length());
                 }
             }
         });
     }
 
+
     @OnClick(R.id.quick_login_btn)
     public void onClick() {
-        String account = etQuickPhone.getText().toString();
-        String password = etQuickCode.getText().toString();
-        BmobUser user = new BmobUser();
-        user.setUsername(account);
-        user.setPassword(password);
-        user.login(new SaveListener<BmobUser>() {
-            @Override
-            public void done(BmobUser bmobUser, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        BmobSMS.requestSMSCode("18826251809","Groupbuy", new QueryListener<Integer>() {
+//
+//            @Override
+//            public void done(Integer smsId,BmobException ex) {
+//                if(ex==null){//验证码发送成功
+//                    Log.e("smile", "短信id："+smsId);//用于查询本次短信发送详情
+//                    etQuickCode.setText(smsId+"");
+//                }else {
+//                    etQuickCode.setText("erro");
+//                }
+//            }
+//        });
+
+//        BmobSMS.verifySmsCode("18826251809", "320731", new UpdateListener() {
+//
+//            @Override
+//            public void done(BmobException ex) {
+//                if(ex==null){//短信验证码已验证成功
+//                    Log.i("smile", "验证通过");
+//                }else{
+//                    Log.i("smile", "验证失败：code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
+//                }
+//            }
+//        });
+//        BmobUser user=new BmobUser();
+//        user.setMobilePhoneNumber("18826251809");
+//        user.setMobilePhoneNumberVerified(true);
+//        BmobUser cur = BmobUser.getCurrentUser();
+//        user.update(cur.getObjectId(),new UpdateListener() {
+//
+//            @Override
+//            public void done(BmobException e) {
+//                if(e==null){
+//                    Toast.makeText(LoginActivity.this, "手机号码绑定成功", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(LoginActivity.this, "失败", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
     }
+
+
 
     @Override
     public void onSucceed(int what, Response<String> response) {
@@ -214,15 +255,17 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             case R.id.login_btn:
                 String account = mUsername.getText().toString();
                 String password = mPassword.getText().toString();
-                BmobUser user = new BmobUser();
+                final BmobUser user = new BmobUser();
                 user.setUsername(account);
                 user.setPassword(password);
                 user.login(new SaveListener<BmobUser>() {
                     @Override
                     public void done(BmobUser bmobUser, BmobException e) {
                         if (e == null) {
-                            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            isLogin=true;
+                            onBackPressed();
                         } else {
+                            isLogin=false;
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -245,4 +288,14 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        EventBus.getDefault().post(isLogin);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

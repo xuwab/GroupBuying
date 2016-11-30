@@ -21,7 +21,7 @@
                 android:layout_height="90.0dip"
                 android:background="@mipmap/my_login_bg"
                 android:paddingLeft="15.0dip"
-                android:visibility="visible"
+                android:visibility="gone"
                 >
 
                 <ImageView
@@ -108,7 +108,7 @@
                 android:layout_height="90.0dip"
                 android:background="@mipmap/my_login_bg"
                 android:padding="15.0dip"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/tv_unlogin_notice"

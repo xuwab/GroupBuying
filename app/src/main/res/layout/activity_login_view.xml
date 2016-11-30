@@ -266,7 +266,7 @@
                         android:layout_centerVertical="true"
                         android:scaleType="center"
                         android:src="@mipmap/delete_username"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <View

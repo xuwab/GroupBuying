@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,10 +20,15 @@ import com.naf.groupbuying.fragment.MainFragment;
 import com.naf.groupbuying.fragment.MineFragment;
 import com.naf.groupbuying.fragment.MoreFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends AppCompatActivity implements ContantsPool{
 
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
 //        startActivity(new Intent(this, BmodTest.class));
     }
 
+
     private void initFragmentTabHost() {
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         for (int i = 0; i < title.length; i++) {
@@ -63,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
             mTabHost.addTab(mTabHost.newTabSpec("" + i).setIndicator(view),fragments[i], null);
         }
     }
+
 
 
     @Override
@@ -79,5 +87,10 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
                 return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
