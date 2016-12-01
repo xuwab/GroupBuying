@@ -1,5 +1,6 @@
 package com.naf.groupbuying.activity.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.activity.register.RegisterActivity;
 import com.naf.groupbuying.entity.LoginInfo;
 import com.naf.groupbuying.listner.login.MyEditTextListener;
 import com.naf.groupbuying.nohttp.HttpListner;
@@ -220,7 +222,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     }
 
     @OnClick({R.id.tv_quick_login, R.id.tv_count_login, R.id.iv_delete_uname, R.id.iv_delete_mobile
-            , R.id.login_btn, R.id.quick_login_btn,R.id.iv_back})
+            , R.id.login_btn, R.id.quick_login_btn,R.id.iv_back,R.id.tv_register})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_quick_login:
@@ -275,6 +277,9 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                 break;
             case R.id.iv_back:
                 onBackPressed();
+                break;
+            case R.id.tv_register:
+                startActivity(new Intent(this, RegisterActivity.class));
                 break;
         }
     }

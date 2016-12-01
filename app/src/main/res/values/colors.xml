@@ -21,6 +21,14 @@
     <color name="green">#009688</color>
     <color name="orange">#ffff6900</color>
 
+    <!-- item -->
+    <color name="color_ac">#ffacacac</color>
+    <color name="color_39">#ff393939</color>
+    <color name="textColor_a0">#ffa0a0a0</color>
+    <color name="listview_driver_color">#ffd8d8d8</color>
+    <color name="lashou_price_color">#ffff4b04</color>
+    <color name="my_gray_textColor">#ffa1a1a1</color>
+
 
     <!--首页-->
     <color name="home_title_bar_color">#009688</color>

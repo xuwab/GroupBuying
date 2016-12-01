@@ -14,4 +14,13 @@
     <string name="pword_hint">密码</string>
     <string name="check_code_hint">验证码</string>
     <string name="union_login">使用合作网站账号登录</string>
+
+    <!-- 注册界面 -->
+    <string name="login_hint">登录密码为6位以上数字和字母的组合，区分大小写</string>
+    <string name="title_activity_neay_by_map">NeayByMapActivity</string>
+    <string name="title_activity_web">WebActivity</string>
+    <string name="title_activity_movie_list">MovieListActivity</string>
+    <string name="title_activity_blank_web">BlankWebActivity</string>
+    <string name="title_activity_daily_recommend">DailyRecommendActivity</string>
+    <string name="title_activity_switch_city">SwitchCityActivity</string>
 </resources>
