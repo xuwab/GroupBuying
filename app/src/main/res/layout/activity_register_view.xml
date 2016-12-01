@@ -224,7 +224,8 @@
                 android:padding="5.0dip"
                 android:text="@string/login_hint"
                 android:textColor="@color/my_gray_textColor"
-                android:textSize="@dimen/size_13" />
+                android:textSize="@dimen/size_13"
+                android:id="@+id/textView"/>
 
             <Button
                 android:id="@+id/bt_get_check_code"

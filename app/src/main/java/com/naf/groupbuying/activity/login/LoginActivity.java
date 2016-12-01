@@ -280,6 +280,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                 break;
             case R.id.tv_register:
                 startActivity(new Intent(this, RegisterActivity.class));
+                finish();
                 break;
         }
     }

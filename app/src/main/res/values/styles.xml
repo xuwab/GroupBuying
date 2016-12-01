@@ -52,7 +52,7 @@
         <item name="android:background">@color/title_bar_color</item>
         <item name="android:paddingLeft">0.0dip</item>
         <item name="android:paddingRight">0.0dip</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50.0dip</item>
     </style>
 </resources>
