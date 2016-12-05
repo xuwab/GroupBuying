@@ -3,6 +3,9 @@
 
     <!-- 首页 -->
     <string name="search_edittext_hint">请输入商品名、品类或商圈...</string>
+    <string name="home_recommend_lable">猜你喜欢</string>
+    <string name="hot_film">热映影片</string>
+    <string name="all_film">全部影片</string>
 
     <!--周边-->
     <string name="action_map">action_edit</string>

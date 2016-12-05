@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.antfortune.freeline'
 repositories {
     flatDir {
         dir 'libs'
@@ -55,20 +56,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-
     //fresco
     compile 'com.facebook.fresco:fresco:0.12.0'
-
     //网络
     compile 'com.yolanda.nohttp:nohttp:1.0.4'
-
     //解析
-   // compile 'com.google.code.gson:gson:2.2.4'
-
+    // compile 'com.google.code.gson:gson:2.2.4'
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
     //3.5.0
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
-
     //Eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
 }

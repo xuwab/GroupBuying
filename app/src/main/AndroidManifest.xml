@@ -55,6 +55,7 @@
         <activity android:name=".activity.login.LoginActivity"/>
         <activity android:name=".BmodTest.BmodTest"/>
         <activity android:name=".activity.register.RegisterActivity"/>
+        <activity android:name=".activity.Collection.CollectionActivity"/>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

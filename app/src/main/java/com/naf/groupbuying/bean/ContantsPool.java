@@ -16,5 +16,8 @@ public interface ContantsPool {
    /**猜你喜欢**/
    String spRecommendURL_NEW = baseUrl + "spRecommend_new.txt";
 
+   /**热门电影**/
+   String filmHotUrl = baseUrl + "filmHot_refresh.txt";
+
 
 }

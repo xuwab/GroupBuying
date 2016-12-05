@@ -10,4 +10,10 @@ public interface BmobListener {
     void loginError();
     void registerSuccess();
     void registerError();
+    void addFavorSuccess();
+    void addFavorError();
+    void querySuccess();
+    void queryError();
+    void deleteSuccess();
+    void deleteError();
 }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.naf.groupbuying.R;
-import com.naf.groupbuying.listner.Bmob.BmobListener;
+import com.naf.groupbuying.listner.Bmob.BmobRegisterListener;
 import com.naf.groupbuying.listner.login.MyEditTextListener;
 import com.naf.groupbuying.utils.BmobUtils;
 
@@ -79,21 +79,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initBmobUtils() {
-        mBmobUtils = BmobUtils.getInstance(new BmobListener() {
+        mBmobUtils = BmobUtils.getInstance(new BmobRegisterListener() {
             @Override
             public void sendMessageSuccess() {
                 Toast.makeText(RegisterActivity.this, "短信已经发送！", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public void loginSuccess() {
-
-            }
-
-            @Override
-            public void loginError() {
-
-            }
 
             @Override
             public void registerSuccess() {

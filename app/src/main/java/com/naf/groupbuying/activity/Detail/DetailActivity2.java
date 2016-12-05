@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
@@ -22,9 +23,14 @@ import com.naf.groupbuying.adapter.MyPagerAdapter;
 import com.naf.groupbuying.bean.ContantsPool;
 import com.naf.groupbuying.custom.MyScrollView;
 import com.naf.groupbuying.entity.DetailInfo;
+import com.naf.groupbuying.entity.FavorInfo;
+import com.naf.groupbuying.listner.Bmob.BmobDeleteListener;
+import com.naf.groupbuying.listner.Bmob.BmobInsertListener;
+import com.naf.groupbuying.listner.Bmob.BmobQueryListener;
 import com.naf.groupbuying.listner.main.MyPagerListner;
 import com.naf.groupbuying.nohttp.CallServer;
 import com.naf.groupbuying.nohttp.HttpListner;
+import com.naf.groupbuying.utils.BmobUtils;
 import com.naf.groupbuying.widget.ViewPagerIndicator;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.RequestMethod;
@@ -91,6 +97,9 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
     private List<View> vpList = new ArrayList<>();
     private int mIvDetailHeight;
 
+    private boolean isFavor;
+    private String mGoodId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,15 +107,34 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        String goodId = intent.getStringExtra("good_id");
+        mGoodId = intent.getStringExtra("good_id");
 
         initListener();
 
 
-        Request<String> request = NoHttp.createStringRequest(ContantsPool.baseUrl + goodId + ".txt", RequestMethod.GET);
+        Request<String> request = NoHttp.createStringRequest(ContantsPool.baseUrl + mGoodId + ".txt", RequestMethod.GET);
         CallServer.getInstance().add(DetailActivity2.this, REQUEST_DETAIL, request, this, true, true);
+        initFavor();
 
+    }
 
+    private void initFavor() {
+        BmobUtils.getInstance(new BmobQueryListener() {
+
+            @Override
+            public void querySuccess() {
+                isFavor=true;
+                ivFavor.setImageResource(R.mipmap.icon_collected_black);
+                Toast.makeText(DetailActivity2.this, "success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void queryError() {
+                isFavor=false;
+                ivFavor.setImageResource(R.mipmap.icon_uncollected);
+                Toast.makeText(DetailActivity2.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        }).queryFavor("goodId",mGoodId);
     }
 
     private void initListener() {
@@ -129,6 +157,38 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
                 onBackPressed();
                 break;
             case R.id.iv_favor:
+                List<String> list=new ArrayList<>();
+                list.add(mGoodId);
+                if(!isFavor){
+                    BmobUtils.getInstance(new BmobInsertListener() {
+                        @Override
+                        public void addFavorSuccess() {
+                            Toast.makeText(DetailActivity2.this, "success", Toast.LENGTH_SHORT).show();
+                            ivFavor.setImageResource(R.mipmap.icon_collected_black);
+                            isFavor=true;
+                        }
+
+                        @Override
+                        public void addFavorError() {
+                            Toast.makeText(DetailActivity2.this, "error", Toast.LENGTH_SHORT).show();
+                        }
+                    }).insertFavor(mDetailInfo);
+                }else {
+                    BmobUtils.getInstance(new BmobDeleteListener() {
+                        @Override
+                        public void deleteSuccess() {
+                            Toast.makeText(DetailActivity2.this, "Success", Toast.LENGTH_SHORT).show();
+                            ivFavor.setImageResource(R.mipmap.icon_uncollected);
+                            isFavor=false;
+                        }
+
+                        @Override
+                        public void deleteError() {
+                            Toast.makeText(DetailActivity2.this, "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }).deleteFavor("goodId",list);
+                }
+
                 break;
             case R.id.iv_share:
                 break;
@@ -156,6 +216,10 @@ public class DetailActivity2 extends AppCompatActivity implements HttpListner<St
                 tvDecs.setText(mDetailInfo.getResult().getTitle());
                 //已售
                 tvBought.setText(mDetailInfo.getResult().getValue());
+
+                tvPrice.setText(mDetailInfo.getResult().getPrice());
+
+                tvValue.setText(mDetailInfo.getResult().getValue());
                 List<String> list = mDetailInfo.getResult().getDetail_imags();
                 for (int i = 0; i < 4; i++) {
                     View view = getLayoutInflater().inflate(R.layout.detail_vp_item, null);

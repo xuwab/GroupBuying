@@ -55,4 +55,15 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50.0dip</item>
     </style>
+
+    <style name="home_super_today_textStyle">
+        <item name="android:textSize">@dimen/section_text_size</item>
+        <item name="android:textColor">@color/home_super_today_textColor_default</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/list_view_item_bg_selector</item>
+        <item name="android:paddingTop">5.0dip</item>
+        <item name="android:paddingBottom">5.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

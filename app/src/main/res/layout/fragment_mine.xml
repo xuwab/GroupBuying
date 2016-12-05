@@ -162,10 +162,12 @@
                     android:background="#50666666"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_collect"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="5.0dip"
+                    android:clickable="true"
                     android:layout_weight="1.0">
 
                     <TextView

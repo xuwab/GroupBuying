@@ -35,6 +35,7 @@
     <color name="image_view_btn_pressed_bgColor">#30000000</color>
     <color name="bg_common_gray">#ffe2e2e2</color>
     <color name="input_normal">#c5c9d0</color>
+    <color name="home_super_today_textColor_default">#ff323232</color>
 
         <!-- GoodsListItem 首页最下面的listView -->
         <color name="title_color">#009688</color>

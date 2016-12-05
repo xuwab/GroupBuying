@@ -10,6 +10,9 @@ import android.view.View;
 
 import com.naf.groupbuying.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * ViewPager指示器

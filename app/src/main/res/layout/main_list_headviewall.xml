@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/view_home_banner"/>
+    <include layout="@layout/view_home_list_divider"/>
+    <include layout="@layout/view_home_catelist"/>
+    <include layout="@layout/view_home_list_divider"/>
+    <include layout="@layout/view_home_advertisement_top"/>
+    <include layout="@layout/view_home_list_divider"/>
+    <include layout="@layout/view_home_advertisement_bottom"/>
+    <include layout="@layout/view_home_list_divider"/>
+    <include layout="@layout/view_home_film"/>
+    <include layout="@layout/divider_horizontal"/>
+    <include layout="@layout/view_home_like_header"/>
+
+</LinearLayout>
