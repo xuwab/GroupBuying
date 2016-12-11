@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.MainActivity"
+    android:orientation="vertical">
 
+    <!--这个是隐藏的布局，然后通过动态的设置高度达到效果-->
+    <LinearLayout
+        android:id="@+id/ll_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:background="@color/green"
+        android:visibility="gone">
+    </LinearLayout>
     <android.support.v4.app.FragmentTabHost
         android:id="@+id/tabHost2"
         android:layout_width="match_parent"
@@ -27,7 +37,8 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:fitsSystemWindows="true">
             </FrameLayout>
             <TabWidget
                 android:divider="@null"
@@ -36,4 +47,4 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </android.support.v4.app.FragmentTabHost>
-</RelativeLayout>
+</LinearLayout>

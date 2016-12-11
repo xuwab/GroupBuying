@@ -1,7 +1,12 @@
 package com.naf.groupbuying.activity.login;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -22,26 +27,34 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
+import com.naf.groupbuying.activity.MainActivity;
 import com.naf.groupbuying.activity.register.RegisterActivity;
+import com.naf.groupbuying.bean.LoginPost;
+import com.naf.groupbuying.bean.Qq.BaseUiListener;
+import com.naf.groupbuying.bean.Qq.Util;
+import com.naf.groupbuying.bean.weibo.ISinaInfo;
+import com.naf.groupbuying.bean.weibo.WeiboUtil;
 import com.naf.groupbuying.entity.LoginInfo;
 import com.naf.groupbuying.listner.login.MyEditTextListener;
 import com.naf.groupbuying.nohttp.HttpListner;
+import com.sina.weibo.sdk.openapi.models.User;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.common.Constants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 import com.yolanda.nohttp.rest.Response;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by naf on 2016/11/27.
@@ -89,13 +102,27 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     private String password;
 
     private boolean isLogin;
+    private static boolean isServerSideLogin = false;
+    private static Tencent mTencent;
+    private UserInfo mInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_view);
         ButterKnife.bind(this);
+        initWeibo();
+        initQq();
         initListener();
+
+    }
+
+    private void initWeibo() {
+        WeiboUtil.initWeibo(LoginActivity.this);
+    }
+
+    private void initQq(){
+        mTencent = Tencent.createInstance("1105878246", this.getApplicationContext());
     }
 
     private void initListener() {
@@ -149,51 +176,6 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     }
 
 
-    @OnClick(R.id.quick_login_btn)
-    public void onClick() {
-//        BmobSMS.requestSMSCode("18826251809","Groupbuy", new QueryListener<Integer>() {
-//
-//            @Override
-//            public void done(Integer smsId,BmobException ex) {
-//                if(ex==null){//验证码发送成功
-//                    Log.e("smile", "短信id："+smsId);//用于查询本次短信发送详情
-//                    etQuickCode.setText(smsId+"");
-//                }else {
-//                    etQuickCode.setText("erro");
-//                }
-//            }
-//        });
-
-//        BmobSMS.verifySmsCode("18826251809", "320731", new UpdateListener() {
-//
-//            @Override
-//            public void done(BmobException ex) {
-//                if(ex==null){//短信验证码已验证成功
-//                    Log.i("smile", "验证通过");
-//                }else{
-//                    Log.i("smile", "验证失败：code ="+ex.getErrorCode()+",msg = "+ex.getLocalizedMessage());
-//                }
-//            }
-//        });
-//        BmobUser user=new BmobUser();
-//        user.setMobilePhoneNumber("18826251809");
-//        user.setMobilePhoneNumberVerified(true);
-//        BmobUser cur = BmobUser.getCurrentUser();
-//        user.update(cur.getObjectId(),new UpdateListener() {
-//
-//            @Override
-//            public void done(BmobException e) {
-//                if(e==null){
-//                    Toast.makeText(LoginActivity.this, "手机号码绑定成功", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(LoginActivity.this, "失败", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
-    }
-
-
 
     @Override
     public void onSucceed(int what, Response<String> response) {
@@ -206,6 +188,8 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                     Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "登录成功  ", Toast.LENGTH_SHORT).show();
+                    EventBus.getDefault().post(new LoginPost(isLogin,""));
+                    finish();
                 }
                 break;
         }
@@ -222,7 +206,8 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     }
 
     @OnClick({R.id.tv_quick_login, R.id.tv_count_login, R.id.iv_delete_uname, R.id.iv_delete_mobile
-            , R.id.login_btn, R.id.quick_login_btn,R.id.iv_back,R.id.tv_register})
+            , R.id.login_btn, R.id.quick_login_btn, R.id.iv_back, R.id.tv_register,R.id.sina_weibo
+            ,R.id.qq_account})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_quick_login:
@@ -264,10 +249,10 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                     @Override
                     public void done(BmobUser bmobUser, BmobException e) {
                         if (e == null) {
-                            isLogin=true;
+                            isLogin = true;
                             onBackPressed();
                         } else {
-                            isLogin=false;
+                            isLogin = false;
                             Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -281,6 +266,45 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             case R.id.tv_register:
                 startActivity(new Intent(this, RegisterActivity.class));
                 finish();
+                break;
+            case R.id.sina_weibo:
+                WeiboUtil.loginWeibo(LoginActivity.this, new com.naf.groupbuying.bean.weibo.ISinaLogin() {
+                    @Override
+                    public void weiboLoginSuccess() {
+                        WeiboUtil.getWeiboInfo(LoginActivity.this, new ISinaInfo() {
+                            @Override
+                            public void getWBInfoSuccess(User user) {
+                                isLogin=true;
+                                EventBus.getDefault().post(new LoginPost(isLogin,user.screen_name));
+                                finish();
+                            }
+
+                            @Override
+                            public void getWBInfoFailure() {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void weiboLoginFarlure() {
+                        Toast.makeText(LoginActivity.this, "ee", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case R.id.qq_account:
+                if (!mTencent.isSessionValid()) {
+                    mTencent.login(this, "all", loginListener);
+                } else {
+                    if (isServerSideLogin) { // Server-Side 模式的登陆, 先退出，再进行SSO登陆
+                        mTencent.logout(this);
+                        mTencent.login(this, "all", loginListener);
+                        isServerSideLogin = false;
+                        return;
+                    }
+                    mTencent.logout(this);
+                    updateUserInfo();
+                }
                 break;
         }
     }
@@ -297,11 +321,75 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        EventBus.getDefault().post(isLogin);
+        EventBus.getDefault().post(new LoginPost(isLogin,""));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_LOGIN ||
+                requestCode == Constants.REQUEST_APPBAR) {
+            Tencent.onActivityResultData(requestCode,resultCode,data,loginListener);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (WeiboUtil.mSsoHandler != null) {
+            WeiboUtil.mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+    }
+
+    IUiListener loginListener = new BaseUiListener(LoginActivity.this) {
+        @Override
+        protected void doComplete(JSONObject values) {
+            Log.d("SDKQQAgentPref", "AuthorSwitch_SDK:" + SystemClock.elapsedRealtime());
+            initOpenidAndToken(values);
+            updateUserInfo();
+        }
+    };
+
+    public static void initOpenidAndToken(JSONObject jsonObject) {
+        try {
+            String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);
+            String expires = jsonObject.getString(Constants.PARAM_EXPIRES_IN);
+            String openId = jsonObject.getString(Constants.PARAM_OPEN_ID);
+            if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(expires)
+                    && !TextUtils.isEmpty(openId)) {
+                mTencent.setAccessToken(token, expires);
+                mTencent.setOpenId(openId);
+            }
+        } catch(Exception e) {
+        }
+    }
+
+    private void updateUserInfo() {
+        if (mTencent != null && mTencent.isSessionValid()) {
+            IUiListener listener = new IUiListener() {
+                @Override
+                public void onError(UiError e) {
+                }
+                @Override
+                public void onComplete(final Object response) {
+                    JSONObject object= (JSONObject)response;
+                    if(object.has("nickname")){
+                        isLogin=true;
+                        try {
+                            EventBus.getDefault().post(new LoginPost(isLogin,object.getString("nickname")));
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onCancel() {
+                }
+            };
+            mInfo = new UserInfo(this, mTencent.getQQToken());
+            mInfo.getUserInfo(listener);
+        }
+    }
+
 }

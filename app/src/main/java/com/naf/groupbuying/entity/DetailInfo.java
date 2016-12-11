@@ -9,7 +9,7 @@ package com.naf.groupbuying.entity;
         import java.util.List;
 
 /**
- * Created by hongkl on 16/8/28.
+ * Created by naf on 16/8/28.
  */
 public class DetailInfo implements Serializable{
 

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.antfortune.freeline'
+//apply plugin: 'com.antfortune.freeline'
 repositories {
     flatDir {
         dir 'libs'
@@ -12,7 +12,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.naf.groupbuying"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -68,4 +68,5 @@ dependencies {
     //Eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile project(':weiboSDK')
 }

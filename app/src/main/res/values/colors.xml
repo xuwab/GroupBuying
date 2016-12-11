@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#009688</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="status_bar_color">@color/green</color>
     <color name="transparent">#00000000</color>
     <color name="login_unable_bg_green">#ff90e4da</color>
     <color name="login_unable_bg">#ffcdced0</color>
@@ -28,7 +30,12 @@
     <color name="listview_driver_color">#ffd8d8d8</color>
     <color name="lashou_price_color">#ffff4b04</color>
     <color name="my_gray_textColor">#ffa1a1a1</color>
-
+    <!-- 主界面 -->
+    <color name="app_bg">#fff7f7f7</color>
+    <color name="app_gray">#ffeeeeee</color>
+    <color name="bg_category_final">#ffe1e1e1</color>
+    <color name="bg_tab_item_text_normal">#A1A1A1</color>
+    <color name="bg_tab_item_text_pressed">#FF6F36</color>
 
     <!--首页-->
     <color name="home_title_bar_color">#009688</color>

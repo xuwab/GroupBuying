@@ -3,7 +3,7 @@ package com.naf.groupbuying.entity;
 import java.util.List;
 
 /**
- * Created by hongkl on 16/8/2.
+ * Created by naf on 16/8/2.
  * 商品信息类
  *
  */

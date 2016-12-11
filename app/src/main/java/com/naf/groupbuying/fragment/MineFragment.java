@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.naf.groupbuying.R;
 import com.naf.groupbuying.activity.Collection.CollectionActivity;
 import com.naf.groupbuying.activity.login.LoginActivity;
+import com.naf.groupbuying.bean.LoginPost;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +47,7 @@ public class MineFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
     }
 
     @Nullable
@@ -66,15 +69,18 @@ public class MineFragment extends Fragment {
                 startActivity(new Intent(getActivity(), CollectionActivity.class));
                 break;
         }
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void login(Boolean islogin) {
+    public void login(LoginPost loginPost) {
         mRlLogined.setVisibility(View.VISIBLE);
         mRlUnlogin.setVisibility(View.GONE);
-        mTvName.setText((String) BmobUser.getObjectByKey("username"));
+        if(TextUtils.isEmpty(loginPost.getName())){
+            mTvName.setText((String) BmobUser.getObjectByKey("username"));
+        }else mTvName.setText(loginPost.getName());
+
     }
+
 
     @Override
     public void onDestroy() {

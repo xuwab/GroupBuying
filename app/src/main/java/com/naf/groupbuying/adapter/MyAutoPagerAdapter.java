@@ -35,7 +35,7 @@ public class MyAutoPagerAdapter extends PagerAdapter {
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
             parent.removeAllViews();
-        }
+            }
         container.addView(view);
         return view;
     }
