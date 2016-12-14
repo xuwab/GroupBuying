@@ -20,10 +20,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-//        final SharedPreferences spMain=getPreferences(MODE_PRIVATE);
-//        boolean isFinishMain=spMain.getBoolean("isFinishMainByBack",false);
-//        Toast.makeText(StartActivity.this, String.valueOf(isFinishMain), Toast.LENGTH_SHORT).show();
-//        if(!isFinishMain){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -32,17 +28,12 @@ public class StartActivity extends AppCompatActivity {
                     Intent intent=new Intent();
                     if(isFirst){
                         sp.edit().putBoolean("isFirst",false).commit();
-//                        spMain.edit().putBoolean("isFinishMainByBack",false).commit();
                         intent.setClass(StartActivity.this,GuideActivity.class);
                     }else intent.setClass(StartActivity.this,MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
             },1000);
-//        }else {
-//            startActivity(new Intent(StartActivity.this,MainActivity.class));
-//            finish();
-//        }
 
     }
 }

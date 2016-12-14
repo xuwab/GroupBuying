@@ -19,10 +19,8 @@ public class HttpResponseListner<T> implements OnResponseListener<T> {
 
     private boolean isLoading;
 
-    private Request<T> mRequest;
 
     public HttpResponseListner(Context context, Request<T> request, HttpListner<T> listner, boolean canCancle, boolean isLoading) {
-        this.mRequest = request;
         this.isLoading = isLoading;
         if (context != null) {
             mWaitDialog = new WaitDialog(context);

@@ -5,6 +5,7 @@ import android.app.Application;
 //import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.rongwei.city.db.DBManager;
 import com.tencent.tauth.Tencent;
 import com.yolanda.nohttp.NoHttp;
 
@@ -22,6 +23,8 @@ import static android.provider.UserDictionary.Words.APP_ID;
 public class MyApplication extends Application {
 
 
+    private DBManager dbManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,6 +35,14 @@ public class MyApplication extends Application {
         SDKInitializer.initialize(this);
         Bmob.initialize(this,"880eef1e95585d7b55891ade112efdbb");
 
+//        city
+        dbManager =new DBManager(getApplicationContext());
+        dbManager.openDatabase();
+    }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        dbManager.closeDatabase();
     }
 }

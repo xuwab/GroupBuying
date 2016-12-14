@@ -1,43 +1,31 @@
 package com.naf.groupbuying.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-//import com.naf.groupbuying.BmodTest.BmodTest;
-import com.naf.groupbuying.BmodTest.BmodTest;
 import com.naf.groupbuying.R;
 import com.naf.groupbuying.bean.ContantsPool;
 import com.naf.groupbuying.fragment.AroundFragment;
 import com.naf.groupbuying.fragment.MainFragment;
 import com.naf.groupbuying.fragment.MineFragment;
 import com.naf.groupbuying.fragment.MoreFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.reflect.Field;
+import com.rongwei.city.utils.SharedPreferencesUtils;
 import java.util.Calendar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.v3.BmobUser;
-
 public class MainActivity extends AppCompatActivity implements ContantsPool{
 
     @BindView(R.id.tabHost2)
     FragmentTabHost mTabHost;
+
+    //返回码
+    private final int RESULT_CODE=100;
 
     private Class[] fragments = new Class[]{
             MainFragment.class,
@@ -59,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initFragmentTabHost();
-//        initState();
-//        startActivity(new Intent(this, BmodTest.class));
     }
 
 
@@ -94,44 +80,12 @@ public class MainActivity extends AppCompatActivity implements ContantsPool{
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initState() {
-//       //当系统版本为4.4或者4.4以上时可以使用沉浸式状态栏
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            //透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            //透明导航栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            //
-//            LinearLayout linear_bar = (LinearLayout)findViewById(R.id.ll_bar);
-//            linear_bar.setVisibility(View.VISIBLE);
-//            //获取到状态栏的高度
-//            int statusHeight = getStatusBarHeight();
-//            //动态的设置隐藏布局的高度
-//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) linear_bar.getLayoutParams();
-//            params.height = statusHeight;
-//            linear_bar.setLayoutParams(params);
-//        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-    }
-    private int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==RESULT_CODE){
+            String cityName= SharedPreferencesUtils.getCityName(MainActivity.this);
+            ((TextView)findViewById(R.id.city_name)).setText(cityName);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

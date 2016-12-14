@@ -1,5 +1,7 @@
 package com.naf.groupbuying.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -77,7 +79,8 @@ public class FilmInfo {
         private String filmId;
         private String filmName;
         private String brief;
-        private String short_brief;
+        @SerializedName("short_brief")
+        private String shortBrief;
         private String dimensional;
         private String imax;
         private String releaseDate;
@@ -88,7 +91,25 @@ public class FilmInfo {
         private int status;
         private int showCinemasCount;
         private int showSchedulesCount;
-        private int have_schedule;
+
+        public int getHaveSchedule() {
+            return haveSchedule;
+        }
+
+        public void setHaveSchedule(int haveSchedule) {
+            this.haveSchedule = haveSchedule;
+        }
+
+        public String getShortBrief() {
+            return shortBrief;
+        }
+
+        public void setShortBrief(String shortBrief) {
+            this.shortBrief = shortBrief;
+        }
+
+        @SerializedName("have_schedule")
+        private int haveSchedule;
         private String media;
         private String imageUrl;
         private String posterUrl;
@@ -117,13 +138,6 @@ public class FilmInfo {
             this.brief = brief;
         }
 
-        public String getShort_brief() {
-            return short_brief;
-        }
-
-        public void setShort_brief(String short_brief) {
-            this.short_brief = short_brief;
-        }
 
         public String getDimensional() {
             return dimensional;
@@ -205,13 +219,6 @@ public class FilmInfo {
             this.showSchedulesCount = showSchedulesCount;
         }
 
-        public int getHave_schedule() {
-            return have_schedule;
-        }
-
-        public void setHave_schedule(int have_schedule) {
-            this.have_schedule = have_schedule;
-        }
 
         public String getMedia() {
             return media;

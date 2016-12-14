@@ -32,12 +32,12 @@ import com.naf.groupbuying.activity.register.RegisterActivity;
 import com.naf.groupbuying.bean.LoginPost;
 import com.naf.groupbuying.bean.Qq.BaseUiListener;
 import com.naf.groupbuying.bean.Qq.Util;
-import com.naf.groupbuying.bean.weibo.ISinaInfo;
-import com.naf.groupbuying.bean.weibo.WeiboUtil;
+//import com.naf.groupbuying.bean.weibo.ISinaInfo;
+//import com.naf.groupbuying.bean.weibo.WeiboUtil;
 import com.naf.groupbuying.entity.LoginInfo;
 import com.naf.groupbuying.listner.login.MyEditTextListener;
 import com.naf.groupbuying.nohttp.HttpListner;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     }
 
     private void initWeibo() {
-        WeiboUtil.initWeibo(LoginActivity.this);
+//        WeiboUtil.initWeibo(LoginActivity.this);
     }
 
     private void initQq(){
@@ -268,29 +268,29 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                 finish();
                 break;
             case R.id.sina_weibo:
-                WeiboUtil.loginWeibo(LoginActivity.this, new com.naf.groupbuying.bean.weibo.ISinaLogin() {
-                    @Override
-                    public void weiboLoginSuccess() {
-                        WeiboUtil.getWeiboInfo(LoginActivity.this, new ISinaInfo() {
-                            @Override
-                            public void getWBInfoSuccess(User user) {
-                                isLogin=true;
-                                EventBus.getDefault().post(new LoginPost(isLogin,user.screen_name));
-                                finish();
-                            }
-
-                            @Override
-                            public void getWBInfoFailure() {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void weiboLoginFarlure() {
-                        Toast.makeText(LoginActivity.this, "ee", Toast.LENGTH_SHORT).show();
-                    }
-                });
+//                WeiboUtil.loginWeibo(LoginActivity.this, new com.naf.groupbuying.bean.weibo.ISinaLogin() {
+//                    @Override
+//                    public void weiboLoginSuccess() {
+//                        WeiboUtil.getWeiboInfo(LoginActivity.this, new ISinaInfo() {
+//                            @Override
+//                            public void getWBInfoSuccess(User user) {
+//                                isLogin=true;
+//                                EventBus.getDefault().post(new LoginPost(isLogin,user.screen_name));
+//                                finish();
+//                            }
+//
+//                            @Override
+//                            public void getWBInfoFailure() {
+//
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void weiboLoginFarlure() {
+//                        Toast.makeText(LoginActivity.this, "ee", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
                 break;
             case R.id.qq_account:
                 if (!mTencent.isSessionValid()) {
@@ -336,9 +336,9 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             Tencent.onActivityResultData(requestCode,resultCode,data,loginListener);
         }
         super.onActivityResult(requestCode, resultCode, data);
-        if (WeiboUtil.mSsoHandler != null) {
-            WeiboUtil.mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
+//        if (WeiboUtil.mSsoHandler != null) {
+//            WeiboUtil.mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+//        }
     }
 
     IUiListener loginListener = new BaseUiListener(LoginActivity.this) {
@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             updateUserInfo();
         }
     };
-
+//
     public static void initOpenidAndToken(JSONObject jsonObject) {
         try {
             String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);

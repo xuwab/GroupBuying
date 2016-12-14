@@ -3,9 +3,6 @@ package com.naf.groupbuying.fragment;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,23 +11,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.naf.groupbuying.R;
 import com.naf.groupbuying.activity.Detail.DetailActivity;
-import com.naf.groupbuying.activity.Detail.DetailActivity2;
 import com.naf.groupbuying.adapter.MyAutoPagerAdapter;
 import com.naf.groupbuying.adapter.MyPagerAdapter;
 import com.naf.groupbuying.adapter.main.FavouriteAdapter;
@@ -41,26 +33,31 @@ import com.naf.groupbuying.entity.FilmInfo;
 import com.naf.groupbuying.entity.GoodsInfo;
 import com.naf.groupbuying.entity.HomeIconInfo;
 import com.naf.groupbuying.listner.main.MyPagerListner;
-import com.naf.groupbuying.nohttp.CallServer;
-import com.naf.groupbuying.nohttp.HttpListner;
+import com.naf.groupbuying.okhttp.HttpListner;
+import com.naf.groupbuying.okhttp.OkHttpCallBack;
+import com.naf.groupbuying.okhttp.OkhttpServer;
 import com.naf.groupbuying.widget.ViewPagerIndicator;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.rongwei.city.CityActivity;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static cn.bmob.v3.BmobRealTimeData.TAG;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements ContantsPool, HttpListner<String> {
+
+public class MainFragment extends Fragment implements ContantsPool, HttpListner {
     private static final int REQUEST_GOODSINFO = 0;
     private static final int REQUEST_FILM = 1;
     @BindView(R.id.srl_main)
@@ -73,13 +70,15 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
     private ViewPagerIndicator mIndicatorAdver;
 
 
+    //请求码
+    private final int REQUEST_CODE=101;
     @BindView(R.id.lv_favourite)
     ListView mListview;
     /**
      * 广告条的数据
      */
     private List<View> mViewsAdver = new ArrayList<>();
-    private Handler adHandler=new Handler();
+    private Handler adHandler = new Handler();
 
     /**
      * 电影
@@ -101,7 +100,9 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
      **/
     private List<GoodsInfo.ResultBean.GoodlistBean> mDatalists = new ArrayList<>();
     private FavouriteAdapter favouriteAdapter;
-    private int[] adIvID={R.mipmap.ad1,R.mipmap.ad2,R.mipmap.ad3,R.mipmap.ad4};
+    private int[] adIvID = {R.mipmap.ad1, R.mipmap.ad2, R.mipmap.ad3, R.mipmap.ad4};
+    private Call mGoodCall;
+    private Call mFilmCall;
 
     @Nullable
     @Override
@@ -124,7 +125,7 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String goodId = mDatalists.get(position - 1).getGoods_id();
-                Intent intent = new Intent(getActivity(), DetailActivity2.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("good_id", goodId);
                 startActivity(intent);
             }
@@ -139,24 +140,23 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
         //广告条viewpager和小标点
         mPagerAdaver = (ViewPager) headView.findViewById(R.id.pager_adver);
         mIndicatorAdver = (ViewPagerIndicator) headView.findViewById(R.id.indicator_adver);
-        mPagerAdaver.setOnPageChangeListener(new MyPagerListner(mIndicatorAdver,4));
+        mPagerAdaver.setOnPageChangeListener(new MyPagerListner(mIndicatorAdver, 4));
         mPagerAdaver.setAdapter(new MyAutoPagerAdapter(mViewsAdver));
         adHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int item=mPagerAdaver.getCurrentItem();
-                mPagerAdaver.setCurrentItem(item+1);
-                adHandler.postDelayed(this,2000);
+                int item = mPagerAdaver.getCurrentItem();
+                mPagerAdaver.setCurrentItem(item + 1);
+                adHandler.postDelayed(this, 2000);
             }
-        },2000);
+        }, 2000);
 
 
         //电影列表
         mLayoutFilm = (RecyclerView) headView.findViewById(R.id.rv_film);
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mLayoutFilm.setLayoutManager(layoutManager);
-
 
 
         //商品分类viewpager和下标点
@@ -204,8 +204,7 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
             @Override
             public void onRefresh() {
                 srlMain.setRefreshing(true);
-                Request<String> request = NoHttp.createStringRequest(spRecommendURL_NEW, RequestMethod.GET);
-                CallServer.getInstance().add(getActivity(), REQUEST_GOODSINFO, request, MainFragment.this, true, true);
+                mGoodCall.enqueue(new OkHttpCallBack(getActivity(),MainFragment.this,true,true));
             }
         });
 
@@ -213,7 +212,7 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String goods_id = mDatalists.get(i - 2).getGoods_id();
-                Intent intent = new Intent(getActivity(), DetailActivity2.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("goods_id", goods_id);
                 startActivity(intent);
             }
@@ -231,7 +230,6 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
         }
 
 
-
         //获取资源文件的数据
         String[] iconName = getResources().getStringArray(R.array.home_bar_labels);
         TypedArray typedArray = getResources().obtainTypedArray(R.array.home_bar_icon);
@@ -244,42 +242,59 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner<
             }
         }
         /**商品列表的请求 **/
-        Request<String> request = NoHttp.createStringRequest(spRecommendURL_NEW, RequestMethod.GET);
-        CallServer.getInstance().add(getActivity(), REQUEST_GOODSINFO, request, this, true, true);
-
+        Request request=new Request.Builder().url(spRecommendURL_NEW).get().build();
+        mGoodCall = OkhttpServer.getInstance().add(getActivity(),request,this,true,true);
         /**热门电影的请求**/
-        Request<String> filmRequest = NoHttp.createStringRequest(filmHotUrl, RequestMethod.GET);
-        CallServer.getInstance().add(getActivity(), REQUEST_FILM, filmRequest, this, true, true);
+        Request filmRequest=new Request.Builder().url(filmHotUrl).get().build();
+        mFilmCall = OkhttpServer.getInstance().add(getActivity(),filmRequest,this,true,true);
     }
 
 
 
 
-    @Override
-    public void onSucceed(int what, Response<String> response) {
-        Gson gson = new Gson();
-        switch (what) {
-            case REQUEST_GOODSINFO:
-                GoodsInfo goodsInfo = gson.fromJson(response.get(), GoodsInfo.class);
-                List<GoodsInfo.ResultBean.GoodlistBean> lists = goodsInfo.getResult().getGoodlist();
-
-                mDatalists.clear();
-                mDatalists.addAll(lists);
-                favouriteAdapter.notifyDataSetChanged();
-
-                srlMain.setRefreshing(false);
-                break;
-
-            case REQUEST_FILM:
-                FilmInfo filmInfo = gson.fromJson(response.get(), FilmInfo.class);
-                List<FilmInfo.ResultBean> results = filmInfo.getResult();
-                mLayoutFilm.setAdapter(new FilmAdapter(getActivity(),results));
+    @OnClick({R.id.city_name, R.id.location_lay})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.location_lay:
+                Intent intent=new Intent(getActivity(), CityActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
                 break;
         }
     }
 
     @Override
-    public void onFailed(int what, String url, Object tag, Exception exception, int responseCode, long networkMillis) {
+    public void onResponse(Call call, Response response) {
+        Gson gson = new Gson();
+        if(response.isSuccessful()){
+            if(call==mGoodCall) {
+                try {
+                    GoodsInfo goodsInfo = gson.fromJson(response.body().string(), GoodsInfo.class);
+                    List<GoodsInfo.ResultBean.GoodlistBean> lists = goodsInfo.getResult().getGoodlist();
+                    mDatalists.clear();
+                    mDatalists.addAll(lists);
+                    favouriteAdapter.notifyDataSetChanged();
+                    srlMain.setRefreshing(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else if(call==mFilmCall){
+                try {
+                    FilmInfo filmInfo = gson.fromJson(response.body().string(), FilmInfo.class);
+                    final List<FilmInfo.ResultBean> results = filmInfo.getResult();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLayoutFilm.setAdapter(new FilmAdapter(getActivity(), results));
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        }
+    @Override
+    public void onFailure(Call call, IOException e) {
 
     }
 }

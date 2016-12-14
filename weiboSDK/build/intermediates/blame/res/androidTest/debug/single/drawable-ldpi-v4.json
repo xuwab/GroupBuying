@@ -24,11 +24,11 @@
         "source": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_focused.png"
     },
     {
-        "merged": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_pressed.png",
-        "source": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_pressed.png"
-    },
-    {
         "merged": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal.png",
         "source": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_button_with_frame_logo_normal.png"
+    },
+    {
+        "merged": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_pressed.png",
+        "source": "D:\\javastudy\\project\\groupbuying\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_pressed.png"
     }
 ]
