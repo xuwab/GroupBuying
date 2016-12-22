@@ -42,7 +42,8 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="rLeBYSjEuUS05BV75oGacS5c8GXNPq8o" />
-        <activity android:name=".activity.guide.StartActivity">
+        <activity android:name=".activity.guide.StartActivity"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -54,7 +55,6 @@
         <activity android:name=".activity.map.LocationActivity"/>
         <activity android:name=".activity.Detail.DetailActivity"/>
         <activity android:name=".activity.login.LoginActivity"/>
-        <activity android:name=".BmodTest.BmodTest"/>
         <activity android:name=".activity.register.RegisterActivity"/>
         <activity android:name=".activity.Collection.CollectionActivity"/>
 

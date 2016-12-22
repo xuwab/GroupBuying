@@ -35,15 +35,15 @@ import com.naf.groupbuying.bean.Qq.Util;
 //import com.naf.groupbuying.bean.weibo.ISinaInfo;
 //import com.naf.groupbuying.bean.weibo.WeiboUtil;
 import com.naf.groupbuying.entity.LoginInfo;
+import com.naf.groupbuying.listner.Bmob.BmobLoginListener;
 import com.naf.groupbuying.listner.login.MyEditTextListener;
-import com.naf.groupbuying.nohttp.HttpListner;
 //import com.sina.weibo.sdk.openapi.models.User;
+import com.naf.groupbuying.utils.BmobUtils;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-import com.yolanda.nohttp.rest.Response;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -60,7 +60,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by naf on 2016/11/27.
  */
 
-public class LoginActivity extends AppCompatActivity implements HttpListner<String> {
+public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.et_quick_phone)
     EditText etQuickPhone;
     @BindView(R.id.et_quick_code)
@@ -106,6 +106,8 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
     private static Tencent mTencent;
     private UserInfo mInfo;
 
+    private BmobUtils mBmobUtils;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +115,31 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
         ButterKnife.bind(this);
         initWeibo();
         initQq();
+        initBmobUtils();
         initListener();
 
     }
 
+    private void initBmobUtils() {
+        mBmobUtils = BmobUtils.getInstance(new BmobLoginListener() {
+            @Override
+            public void sendMessageSuccess() {
+                Toast.makeText(LoginActivity.this, "短信已经发送！", Toast.LENGTH_SHORT).show();
+            }
+
+
+            @Override
+            public void loginSuccess () {
+                Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            }
+
+            @Override
+            public void loginError() {
+                Toast.makeText(LoginActivity.this, "登录失败！", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void initWeibo() {
 //        WeiboUtil.initWeibo(LoginActivity.this);
     }
@@ -175,39 +198,9 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
         });
     }
 
-
-
-    @Override
-    public void onSucceed(int what, Response<String> response) {
-        switch (what) {
-            case 0:
-                Gson gson = new Gson();
-                LoginInfo loginInfo = gson.fromJson(response.get(), LoginInfo.class);
-                String userName = loginInfo.getUsername();
-                if (TextUtils.isEmpty(userName)) {
-                    Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "登录成功  ", Toast.LENGTH_SHORT).show();
-                    EventBus.getDefault().post(new LoginPost(isLogin,""));
-                    finish();
-                }
-                break;
-        }
-
-    }
-
-    @Override
-    public void onFailed(int what, String url, Object tag, Exception exception, int responseCode, long networkMillis) {
-        switch (what) {
-            case 0:
-                Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
     @OnClick({R.id.tv_quick_login, R.id.tv_count_login, R.id.iv_delete_uname, R.id.iv_delete_mobile
             , R.id.login_btn, R.id.quick_login_btn, R.id.iv_back, R.id.tv_register,R.id.sina_weibo
-            ,R.id.qq_account})
+            ,R.id.qq_account,R.id.btn_get_code})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_quick_login:
@@ -258,7 +251,22 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
                     }
                 });
                 break;
+            case R.id.btn_get_code:
+                if(TextUtils.isEmpty(phone)||phone.length()!=11){
+                    Toast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mBmobUtils.requestCode(phone);
+                break;
             case R.id.quick_login_btn:
+                if(TextUtils.isEmpty(phone)||phone.length()!=11){
+                    Toast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(TextUtils.isEmpty(code)){
+                    Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mBmobUtils.loginByPhoneCode(phone,code);
                 break;
             case R.id.iv_back:
                 onBackPressed();
@@ -324,11 +332,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
         EventBus.getDefault().post(new LoginPost(isLogin,""));
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
+    //处理返回的qq或者微博信息
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_LOGIN ||
@@ -341,6 +345,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
 //        }
     }
 
+    //qq登录更新
     IUiListener loginListener = new BaseUiListener(LoginActivity.this) {
         @Override
         protected void doComplete(JSONObject values) {
@@ -349,7 +354,8 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
             updateUserInfo();
         }
     };
-//
+
+    //qq登录初始化Token
     public static void initOpenidAndToken(JSONObject jsonObject) {
         try {
             String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);
@@ -364,6 +370,7 @@ public class LoginActivity extends AppCompatActivity implements HttpListner<Stri
         }
     }
 
+    //监听qq用户信息并更新
     private void updateUserInfo() {
         if (mTencent != null && mTencent.isSessionValid()) {
             IUiListener listener = new IUiListener() {

@@ -10,7 +10,7 @@
         android:id="@+id/btn_test_map_jing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="景华新村"/>
+        android:text="Test Location"/>
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapView"

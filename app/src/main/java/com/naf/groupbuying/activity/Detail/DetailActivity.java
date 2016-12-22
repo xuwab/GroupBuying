@@ -106,17 +106,22 @@ public class DetailActivity extends AppCompatActivity implements HttpListner<Str
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        //一键分享初始化
         ShareSDK.initSDK(this,"1954784b5bf7f");
+
+        //获取商品ID
         Intent intent = getIntent();
         mGoodId = intent.getStringExtra("good_id");
 
+
         initListener();
 
-
+        //获取商品详情数据
         Request<String> request = NoHttp.createStringRequest(ContantsPool.baseUrl + mGoodId + ".txt", RequestMethod.GET);
         CallServer.getInstance().add(DetailActivity.this, REQUEST_DETAIL, request, this, true, true);
-        initFavor();
 
+        //初始化查询商品是否被收藏
+        initFavor();
     }
 
     private void initFavor() {
@@ -126,18 +131,19 @@ public class DetailActivity extends AppCompatActivity implements HttpListner<Str
             public void querySuccess() {
                 isFavor=true;
                 ivFavor.setImageResource(R.mipmap.icon_collected_black);
-                Toast.makeText(DetailActivity.this, "success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void queryError() {
                 isFavor=false;
                 ivFavor.setImageResource(R.mipmap.icon_uncollected);
-                Toast.makeText(DetailActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         }).queryFavor("goodId",mGoodId);
     }
 
+    /**
+     * 获取viewpager高度
+     */
     private void initListener() {
         //但是需要注意的是OnGlobalLayoutListener可能会被多次触发，因此在得到了高度之后，要将OnGlobalLayoutListener注销掉。
         final ViewTreeObserver vto=vpDetail.getViewTreeObserver();
@@ -195,6 +201,9 @@ public class DetailActivity extends AppCompatActivity implements HttpListner<Str
         }
     }
 
+    /**
+     * 一键分享的操作
+     */
     private void showShare() {
         ShareSDK.initSDK(this);
         OnekeyShare oks = new OnekeyShare();
@@ -220,6 +229,8 @@ public class DetailActivity extends AppCompatActivity implements HttpListner<Str
         // 启动分享GUI
         oks.show(this);
     }
+
+    //设置细节信息
     @Override
     public void onSucceed(int what, Response<String> response) {
         switch (what) {

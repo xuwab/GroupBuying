@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
+              android:layout_height="match_parent"
+    android:background="@color/bg_start">
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/start"/>
-</LinearLayout>
+        android:id="@+id/iv_girl"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/food"/>
+
+    <com.naf.groupbuying.widget.ShineTextView
+        android:id="@+id/tv_shine"
+        android:gravity="center"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/iv_girl"
+        android:text="GroupBuying"
+        android:textSize="40dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Copyright©2016 xuwab@outlook.com"/>
+
+</RelativeLayout>

@@ -81,7 +81,7 @@ public class BmobUtils {
 
 
     public void loginByPhoneCode(final String phone, final String code){
-        BmobUser.signOrLoginByMobilePhone(phone, code, new LogInListener<User>() {
+        BmobUser.loginBySMSCode(phone, code, new LogInListener<User>() {
 
             @Override
             public void done(User user, BmobException e) {

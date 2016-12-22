@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import com.naf.groupbuying.entity.GoodsInfo;
 import com.naf.groupbuying.entity.HomeIconInfo;
 import com.naf.groupbuying.listner.main.MyPagerListner;
 import com.naf.groupbuying.okhttp.HttpListner;
-import com.naf.groupbuying.okhttp.OkHttpCallBack;
 import com.naf.groupbuying.okhttp.OkhttpServer;
 import com.naf.groupbuying.widget.ViewPagerIndicator;
 import com.rongwei.city.CityActivity;
@@ -49,8 +47,6 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import static cn.bmob.v3.BmobRealTimeData.TAG;
 
 
 /**
@@ -101,8 +97,9 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner 
     private List<GoodsInfo.ResultBean.GoodlistBean> mDatalists = new ArrayList<>();
     private FavouriteAdapter favouriteAdapter;
     private int[] adIvID = {R.mipmap.ad1, R.mipmap.ad2, R.mipmap.ad3, R.mipmap.ad4};
-    private Call mGoodCall;
     private Call mFilmCall;
+
+    private Call cacheGoodCall;
 
     @Nullable
     @Override
@@ -204,7 +201,8 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner 
             @Override
             public void onRefresh() {
                 srlMain.setRefreshing(true);
-                mGoodCall.enqueue(new OkHttpCallBack(getActivity(),MainFragment.this,true,true));
+                Request request=new Request.Builder().url(spRecommendURL_NEW).get().build();
+                cacheGoodCall = OkhttpServer.getInstance().add(getActivity(),request,MainFragment.this,true,true);
             }
         });
 
@@ -243,7 +241,7 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner 
         }
         /**商品列表的请求 **/
         Request request=new Request.Builder().url(spRecommendURL_NEW).get().build();
-        mGoodCall = OkhttpServer.getInstance().add(getActivity(),request,this,true,true);
+        cacheGoodCall = OkhttpServer.getInstance().add(getActivity(),request,this,true,true);
         /**热门电影的请求**/
         Request filmRequest=new Request.Builder().url(filmHotUrl).get().build();
         mFilmCall = OkhttpServer.getInstance().add(getActivity(),filmRequest,this,true,true);
@@ -266,14 +264,19 @@ public class MainFragment extends Fragment implements ContantsPool, HttpListner 
     public void onResponse(Call call, Response response) {
         Gson gson = new Gson();
         if(response.isSuccessful()){
-            if(call==mGoodCall) {
+            if(call== cacheGoodCall) {
                 try {
                     GoodsInfo goodsInfo = gson.fromJson(response.body().string(), GoodsInfo.class);
-                    List<GoodsInfo.ResultBean.GoodlistBean> lists = goodsInfo.getResult().getGoodlist();
-                    mDatalists.clear();
-                    mDatalists.addAll(lists);
-                    favouriteAdapter.notifyDataSetChanged();
-                    srlMain.setRefreshing(false);
+                    final List<GoodsInfo.ResultBean.GoodlistBean> lists = goodsInfo.getResult().getGoodlist();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDatalists.clear();
+                            mDatalists.addAll(lists);
+                            favouriteAdapter.notifyDataSetChanged();
+                            srlMain.setRefreshing(false);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

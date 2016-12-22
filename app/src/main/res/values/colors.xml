@@ -36,6 +36,7 @@
     <color name="bg_category_final">#ffe1e1e1</color>
     <color name="bg_tab_item_text_normal">#A1A1A1</color>
     <color name="bg_tab_item_text_pressed">#FF6F36</color>
+    <color name="bg_start">#f5f5f7</color>
 
     <!--首页-->
     <color name="home_title_bar_color">#009688</color>
